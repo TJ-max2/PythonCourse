@@ -24,11 +24,11 @@ class ConnectFourGUI:
         
         #game board canvas
         self.canvas = tk.Canvas(master, width=700, height=600, bg='blue')
-        self.canvas.grid(row=1, columnspan=7)
+        self.canvas.grid(row=1, column=0, columnspan=7)
 
         #displays the players turn
         self.turn_label = tk.Label(master, text=f"{self.players[self.current_player]}'s turn", font=('Arial', 16))
-        self.turn_label.grid(row=2, columnspan=7)
+        self.turn_label.grid(row=2, column=0, columnspan=7)
 
         #initial empty board
         self.draw_board()
@@ -53,9 +53,13 @@ class ConnectFourGUI:
                 #check for win or draw
                 if self.check_win(row, col):
                     messagebox.showinfo("Game Over", f"{self.players[self.current_player]} wins!")
+                    for button in self.buttons: #Disables all buttons
+                        button['state'] = 'disabled'
                     self.reset_game()
                 elif self.is_board_full():
                     messagebox.showinfo("Game Over", "It's a draw!")
+                    for button in self.buttons: #Disables all buttons
+                        button['state'] = 'disabled'
                     self.reset_game()
                 else:
                     #switch to other player
@@ -65,7 +69,7 @@ class ConnectFourGUI:
         messagebox.showwarning("Invalid Move", "This column is full!")
     
 
-    #colored cirlce drawn to rep player's move
+    #colored circle drawn to rep player's move
     def draw_piece(self, row: int, col: int):
         x = col * 100 + 50
         y = row * 100 + 50
@@ -102,6 +106,8 @@ class ConnectFourGUI:
         self.canvas.delete("all")
         self.draw_board()
         self.update_turn_label()
+        for button in self.buttons: #Enable all buttons
+            button['state'] = 'normal'
 
     #updates player's turn
     def update_turn_label(self):
